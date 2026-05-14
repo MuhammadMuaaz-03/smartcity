@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Smart City — Connecting People, Services & Technology. Building Tomorrow's City Today.">
+<title>SmartCity — Building Tomorrow's City Today</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   RESET & ROOT
+═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+:root {
+  --c: #00D4FF;
+  --c2: #00FFB2;
+  --c3: #7B61FF;
+  --c-glow: rgba(0,212,255,0.18);
+  --c2-glow: rgba(0,255,178,0.12);
+  --bg: #030810;
+  --bg2: #060f1e;
+  --bg3: #091425;
+  --bg4: #0c1a30;
+  --glass: rgba(6,15,30,0.7);
+  --glass-border: rgba(0,212,255,0.12);
+  --glass-border-h: rgba(0,212,255,0.35);
+  --text: #e8f4ff;
+  --text2: #7aa0be;
+  --text3: #3a5a78;
+  --head: 'Oxanium', sans-serif;
+  --body: 'Outfit', sans-serif;
+  --r: 12px;
+  --r2: 20px;
+  --shadow: 0 0 40px rgba(0,212,255,0.08);
+  --glow-sm: 0 0 20px rgba(0,212,255,0.3);
+  --glow-md: 0 0 40px rgba(0,212,255,0.25), 0 0 80px rgba(0,212,255,0.1);
+}
+
+[data-theme="light"] {
+  --bg: #f0f6ff;
+  --bg2: #e4eef9;
+  --bg3: #d8e8f5;
+  --bg4: #cce0f0;
+  --glass: rgba(240,246,255,0.85);
+  --glass-border: rgba(0,120,200,0.15);
+  --glass-border-h: rgba(0,120,200,0.4);
+  --text: #0a1628;
+  --text2: #2a5070;
+  --text3: #6090b0;
+  --shadow: 0 0 40px rgba(0,120,200,0.06);
+  --c: #0078C8;
+  --c2: #00a875;
+  --c-glow: rgba(0,120,200,0.12);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-weight: 300;
+  line-height: 1.65;
+  overflow-x: hidden;
+  transition: background 0.4s, color 0.4s;
+}
+
+/* ═══════════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════════ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--c); border-radius: 10px; }
+
+/* ═══════════════════════════════════════════
+   PARTICLES CANVAS
+═══════════════════════════════════════════ */
+#particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5; }
+
+/* ═══════════════════════════════════════════
+   LOADING SCREEN
+═══════════════════════════════════════════ */
+#loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 1.5rem;
+  transition: opacity 0.6s, visibility 0.6s;
+}
+#loader.hidden { opacity: 0; visibility: hidden; }
+.loader-ring {
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: var(--c);
+  border-right-color: var(--c2);
+  animation: spin 1s linear infinite;
+  box-shadow: var(--glow-sm);
+}
+.loader-text {
+  font-family: var(--head);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--c);
+  text-transform: uppercase;
+  animation: blink 1.5s ease infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 3rem;
+  background: rgba(3,8,16,0.82);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  transition: all 0.3s;
+}
+nav.scrolled { padding: 0.7rem 3rem; background: rgba(3,8,16,0.95); }
+.nav-logo {
+  font-family: var(--head);
+  font-weight: 800; font-size: 1.2rem;
+  letter-spacing: 0.06em; color: var(--c);
+  text-decoration: none; display: flex; align-items: center; gap: 0.5rem;
+}
+.nav-logo::before {
+  content: '◆';
+  font-size: 0.7rem;
+  animation: blink 2s infinite;
+}
+.nav-logo span { color: var(--text); }
+.nav-links { display: flex; gap: 0.25rem; list-style: none; }
+.nav-links a {
+  text-decoration: none;
+  font-size: 0.82rem; letter-spacing: 0.05em;
+  color: var(--text2); padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  transition: all 0.2s; font-weight: 400;
+}
+.nav-links a:hover { color: var(--c); background: var(--c-glow); }
+.nav-right { display: flex; align-items: center; gap: 0.75rem; }
+.theme-btn {
+  width: 38px; height: 38px;
+  border-radius: 50%; border: 1px solid var(--glass-border);
+  background: transparent; color: var(--text2);
+  cursor: pointer; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.theme-btn:hover { border-color: var(--c); color: var(--c); background: var(--c-glow); }
+.nav-cta {
+  background: linear-gradient(135deg, var(--c), var(--c2));
+  color: var(--bg); border: none; padding: 0.5rem 1.3rem;
+  font-family: var(--body); font-size: 0.82rem; font-weight: 600;
+  border-radius: 6px; cursor: pointer; letter-spacing: 0.04em;
+  transition: all 0.2s; position: relative; overflow: hidden;
+}
+.nav-cta::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(255,255,255,0.15);
+  opacity: 0; transition: opacity 0.2s;
+}
+.nav-cta:hover::after { opacity: 1; }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+.hamburger span { display: block; width: 22px; height: 2px; background: var(--text2); border-radius: 2px; transition: all 0.3s; }
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 8rem 2rem 5rem;
+  z-index: 1; overflow: hidden;
+}
+
+/* city grid floor */
+.hero-grid {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 45%; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.06) 1px, transparent 1px);
+  background-size: 50px 50px;
+  transform: perspective(600px) rotateX(55deg);
+  transform-origin: bottom;
+  mask-image: linear-gradient(to bottom, transparent, black 30%);
+}
+
+.hero-glow-1 {
+  position: absolute; width: 800px; height: 800px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 65%);
+  top: 10%; left: 50%; transform: translateX(-50%); pointer-events: none;
+}
+.hero-glow-2 {
+  position: absolute; width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(123,97,255,0.06) 0%, transparent 65%);
+  top: 30%; left: 20%; pointer-events: none;
+}
+.hero-glow-3 {
+  position: absolute; width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,255,178,0.06) 0%, transparent 65%);
+  top: 20%; right: 15%; pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  border: 1px solid var(--glass-border-h);
+  padding: 0.4rem 1.2rem; border-radius: 100px;
+  font-size: 0.75rem; letter-spacing: 0.12em;
+  color: var(--c); text-transform: uppercase;
+  margin-bottom: 2rem;
+  background: var(--c-glow);
+  backdrop-filter: blur(10px);
+  animation: fadeUp 0.8s ease both;
+}
+.hero-badge-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--c2);
+  animation: blink 1.5s infinite;
+}
+
+.hero h1 {
+  font-family: var(--head); font-weight: 800;
+  font-size: clamp(2.8rem, 6.5vw, 5.5rem);
+  line-height: 1.0; letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.8s 0.15s ease both;
+}
+.hero h1 .line1 { display: block; }
+.hero h1 .accent {
+  background: linear-gradient(135deg, var(--c) 0%, var(--c2) 50%, var(--c3) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--text2); max-width: 580px; line-height: 1.7;
+  margin: 0 auto 2.5rem;
+  animation: fadeUp 0.8s 0.25s ease both;
+}
+
+.hero-ctas {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.8s 0.35s ease both;
+  margin-bottom: 5rem;
+}
+
+.btn-glow {
+  background: linear-gradient(135deg, var(--c), var(--c2));
+  color: #030810; border: none;
+  padding: 0.85rem 2.2rem;
+  font-family: var(--body); font-size: 0.9rem; font-weight: 600;
+  border-radius: 8px; cursor: pointer; letter-spacing: 0.04em;
+  position: relative; overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 30px rgba(0,212,255,0.25);
+  text-decoration: none; display: inline-block;
+}
+.btn-glow:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(0,212,255,0.4); }
+.btn-glow::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+  opacity: 0; transition: opacity 0.2s;
+}
+.btn-glow:hover::before { opacity: 1; }
+
+.btn-outline {
+  background: transparent; color: var(--text);
+  border: 1px solid var(--glass-border-h);
+  padding: 0.85rem 2.2rem;
+  font-family: var(--body); font-size: 0.9rem; font-weight: 400;
+  border-radius: 8px; cursor: pointer; letter-spacing: 0.04em;
+  transition: all 0.2s;
+  text-decoration: none; display: inline-block;
+  backdrop-filter: blur(8px);
+}
+.btn-outline:hover { border-color: var(--c); color: var(--c); background: var(--c-glow); }
+
+.hero-stats {
+  display: flex; gap: 0; border: 1px solid var(--glass-border);
+  border-radius: var(--r2); overflow: hidden;
+  backdrop-filter: blur(16px);
+  background: var(--glass);
+  animation: fadeUp 0.8s 0.5s ease both;
+}
+.hero-stat {
+  padding: 1.5rem 2.5rem; text-align: center;
+  border-right: 1px solid var(--glass-border);
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat-num {
+  font-family: var(--head); font-weight: 700; font-size: 1.8rem;
+  color: var(--c); line-height: 1;
+  text-shadow: 0 0 20px rgba(0,212,255,0.5);
+}
+.hero-stat-label {
+  font-size: 0.72rem; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.3rem;
+}
+
+/* scroll indicator */
+.scroll-hint {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  color: var(--text3); font-size: 0.7rem; letter-spacing: 0.15em;
+  text-transform: uppercase; animation: fadeIn 1s 1.5s both;
+}
+.scroll-mouse {
+  width: 22px; height: 34px; border: 1.5px solid var(--text3);
+  border-radius: 11px; position: relative;
+}
+.scroll-mouse::after {
+  content: '';
+  position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+  width: 3px; height: 6px; border-radius: 2px; background: var(--c);
+  animation: scrollDot 2s ease infinite;
+}
+@keyframes scrollDot {
+  0% { top: 6px; opacity: 1; }
+  100% { top: 18px; opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════
+   SECTIONS COMMON
+═══════════════════════════════════════════ */
+section { position: relative; z-index: 1; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+.section-pad { padding: 7rem 0; }
+.section-pad-sm { padding: 5rem 0; }
+
+.section-tag {
+  display: inline-block;
+  font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--c); font-weight: 600; margin-bottom: 0.75rem;
+  padding: 0.3rem 0.8rem; border-radius: 4px;
+  background: var(--c-glow); border: 1px solid rgba(0,212,255,0.2);
+}
+.section-tag.green { color: var(--c2); background: var(--c2-glow); border-color: rgba(0,255,178,0.2); }
+
+.section-title {
+  font-family: var(--head); font-weight: 700;
+  font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+  letter-spacing: -0.01em; line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.section-title .gd {
+  background: linear-gradient(135deg, var(--c), var(--c2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-desc { color: var(--text2); font-size: 1rem; max-width: 540px; line-height: 1.7; }
+.section-header-center { text-align: center; }
+.section-header-center .section-desc { margin: 0 auto; }
+
+/* reveal */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-left { opacity: 0; transform: translateX(-30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-right { opacity: 0; transform: translateX(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+/* glass card */
+.glass-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r2);
+  backdrop-filter: blur(16px);
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.glass-card:hover {
+  border-color: var(--glass-border-h);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow), 0 20px 60px rgba(0,0,0,0.3);
+}
+
+/* ═══════════════════════════════════════════
+   ABOUT / SMART CITY
+═══════════════════════════════════════════ */
+.about-bg {
+  background: linear-gradient(180deg, transparent, rgba(0,212,255,0.02) 50%, transparent);
+}
+
+.pillars-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+  margin-top: 4rem;
+}
+.pillar-card {
+  padding: 2.5rem 2rem;
+  position: relative; overflow: hidden;
+  cursor: default;
+}
+.pillar-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.pillar-card:hover::before { opacity: 1; }
+
+.pillar-number {
+  font-family: var(--head); font-weight: 800;
+  font-size: 4rem; line-height: 1;
+  color: rgba(0,212,255,0.06);
+  position: absolute; top: 1rem; right: 1.5rem;
+  letter-spacing: -0.04em;
+}
+
+.pillar-icon-wrap {
+  width: 56px; height: 56px;
+  border-radius: var(--r); margin-bottom: 1.5rem;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  position: relative;
+}
+.pillar-icon-wrap::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  border: 1px solid;
+  opacity: 0.3;
+}
+
+.pillar-card h3 {
+  font-family: var(--head); font-weight: 700;
+  font-size: 1.2rem; margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.pillar-features { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.pillar-features li {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.88rem; color: var(--text2);
+}
+.pillar-features li::before {
+  content: '▸'; font-size: 0.6rem; flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════
+   STATS TICKER
+═══════════════════════════════════════════ */
+.stats-band {
+  background: var(--bg2);
+  border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 2.5rem 0;
+  overflow: hidden;
+}
+.stats-inner {
+  display: flex; gap: 0;
+  max-width: 1200px; margin: 0 auto; padding: 0 2rem;
+  flex-wrap: wrap;
+}
+.stat-item {
+  flex: 1; min-width: 160px;
+  text-align: center;
+  padding: 0 2rem;
+  border-right: 1px solid var(--glass-border);
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: var(--head); font-weight: 800;
+  font-size: 2.2rem; color: var(--c); line-height: 1;
+  text-shadow: 0 0 30px rgba(0,212,255,0.4);
+}
+.stat-unit { font-size: 1.2rem; }
+.stat-label { font-size: 0.78rem; color: var(--text3); letter-spacing: 0.08em; margin-top: 0.4rem; text-transform: uppercase; }
+
+/* ═══════════════════════════════════════════
+   TRANSPORT
+═══════════════════════════════════════════ */
+.transport-section { background: var(--bg2); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
+
+.transport-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+  align-items: center;
+}
+
+.transport-cards { display: flex; flex-direction: column; gap: 1rem; }
+
+.t-card {
+  display: flex; align-items: center; gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--r);
+  cursor: pointer; position: relative;
+  transition: all 0.25s;
+}
+.t-card.active {
+  background: var(--bg3);
+  border-color: var(--glass-border-h) !important;
+  box-shadow: 0 0 30px rgba(0,212,255,0.1);
+}
+.t-card-icon {
+  width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+  background: var(--c-glow); border: 1px solid var(--glass-border);
+  transition: all 0.25s;
+}
+.t-card.active .t-card-icon {
+  background: linear-gradient(135deg, var(--c), var(--c2));
+  border: none; color: #030810;
+}
+.t-card-text h4 { font-family: var(--head); font-weight: 600; font-size: 0.95rem; margin-bottom: 0.2rem; }
+.t-card-text p { font-size: 0.82rem; color: var(--text2); }
+.t-card-arrow { margin-left: auto; color: var(--text3); font-size: 0.8rem; transition: all 0.25s; }
+.t-card.active .t-card-arrow { color: var(--c); transform: translateX(3px); }
+
+/* map display */
+.map-display {
+  background: var(--bg3);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r2); overflow: hidden;
+  position: relative; aspect-ratio: 4/3;
+}
+.map-display-inner {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.map-label-bar {
+  position: absolute; top: 1rem; left: 1rem; right: 1rem;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(3,8,16,0.8); border: 1px solid var(--glass-border);
+  border-radius: 8px; padding: 0.6rem 1rem;
+  backdrop-filter: blur(8px);
+}
+.map-label-title { font-size: 0.75rem; letter-spacing: 0.1em; color: var(--c); font-family: var(--head); font-weight: 600; }
+.map-live { display: flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; color: var(--c2); }
+.map-live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--c2); animation: blink 1s infinite; }
+
+/* map blips */
+.map-blip {
+  position: absolute;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 10px var(--c);
+}
+.map-blip::after {
+  content: '';
+  position: absolute; inset: -4px; border-radius: 50%;
+  border: 1px solid var(--c);
+  animation: blip-ring 2s ease infinite;
+  opacity: 0;
+}
+@keyframes blip-ring { 0%{transform:scale(1);opacity:0.6} 100%{transform:scale(3);opacity:0} }
+
+.map-scan-line {
+  position: absolute; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,212,255,0.5), transparent);
+  animation: scan 3s linear infinite;
+}
+@keyframes scan { 0%{top:5%;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{top:95%;opacity:0} }
+
+.map-stats-bar {
+  position: absolute; bottom: 1rem; left: 1rem; right: 1rem;
+  display: flex; gap: 0.5rem;
+}
+.map-mini-stat {
+  flex: 1; background: rgba(3,8,16,0.85); border: 1px solid var(--glass-border);
+  border-radius: 8px; padding: 0.6rem; text-align: center;
+  backdrop-filter: blur(8px);
+}
+.map-mini-val { font-family: var(--head); font-size: 1rem; font-weight: 700; color: var(--c); }
+.map-mini-key { font-size: 0.65rem; color: var(--text3); margin-top: 0.1rem; letter-spacing: 0.06em; }
+
+/* ═══════════════════════════════════════════
+   COMPLAINT SYSTEM
+═══════════════════════════════════════════ */
+.complaint-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+  align-items: start; margin-top: 4rem;
+}
+
+.complaint-form-mock {
+  background: var(--bg3);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r2); padding: 2rem;
+}
+.form-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.5rem; padding-bottom: 1rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+.form-title { font-family: var(--head); font-size: 1rem; font-weight: 600; }
+.anon-badge {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-size: 0.7rem; padding: 0.25rem 0.7rem; border-radius: 100px;
+  background: rgba(0,255,178,0.1); color: var(--c2);
+  border: 1px solid rgba(0,255,178,0.2); font-weight: 500;
+}
+
+.form-group { margin-bottom: 1rem; }
+.form-label {
+  display: block; font-size: 0.75rem; color: var(--text2);
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem;
+}
+.form-input {
+  width: 100%; background: var(--bg4);
+  border: 1px solid var(--glass-border); border-radius: 8px;
+  padding: 0.7rem 1rem; color: var(--text);
+  font-family: var(--body); font-size: 0.88rem;
+  outline: none; transition: border-color 0.2s;
+}
+.form-input:focus { border-color: var(--c); }
+.form-input::placeholder { color: var(--text3); }
+.form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237aa0be'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
+.form-textarea { resize: vertical; min-height: 90px; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+.form-submit {
+  width: 100%; padding: 0.85rem;
+  background: linear-gradient(135deg, var(--c), var(--c2));
+  color: #030810; border: none; border-radius: 8px;
+  font-family: var(--body); font-weight: 600; font-size: 0.9rem;
+  cursor: pointer; letter-spacing: 0.04em;
+  transition: all 0.2s;
+  box-shadow: 0 0 20px rgba(0,212,255,0.2);
+  margin-top: 0.5rem;
+}
+.form-submit:hover { box-shadow: 0 0 40px rgba(0,212,255,0.35); transform: translateY(-1px); }
+
+/* progress tracker */
+.progress-tracker { display: flex; flex-direction: column; gap: 0; }
+.progress-step {
+  display: flex; gap: 1rem; position: relative;
+  padding-bottom: 1.5rem;
+}
+.progress-step:last-child { padding-bottom: 0; }
+.progress-step-left { display: flex; flex-direction: column; align-items: center; }
+.progress-dot {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 600; font-family: var(--head);
+  transition: all 0.3s; z-index: 1;
+}
+.progress-dot.done { background: linear-gradient(135deg, var(--c), var(--c2)); color: #030810; box-shadow: 0 0 15px rgba(0,212,255,0.4); }
+.progress-dot.active { background: var(--c-glow); color: var(--c); border: 1.5px solid var(--c); box-shadow: 0 0 20px rgba(0,212,255,0.3); animation: blink 1.5s infinite; }
+.progress-dot.pending { background: var(--bg4); color: var(--text3); border: 1px solid var(--glass-border); }
+.progress-line {
+  width: 1px; flex: 1; margin: 2px 0;
+  background: var(--glass-border);
+  min-height: 20px;
+}
+.progress-line.done { background: linear-gradient(180deg, var(--c), var(--c2)); }
+
+.progress-content { padding-top: 0.35rem; flex: 1; }
+.progress-content h4 { font-family: var(--head); font-size: 0.9rem; font-weight: 600; margin-bottom: 0.2rem; }
+.progress-content p { font-size: 0.8rem; color: var(--text2); }
+.progress-status {
+  font-size: 0.68rem; padding: 0.2rem 0.6rem; border-radius: 4px;
+  font-weight: 500; letter-spacing: 0.06em; margin-top: 0.4rem;
+  display: inline-block;
+}
+.status-done { background: rgba(0,255,178,0.1); color: var(--c2); }
+.status-active { background: rgba(0,212,255,0.1); color: var(--c); }
+.status-pending { background: var(--bg4); color: var(--text3); }
+
+/* ═══════════════════════════════════════════
+   CITY SERVICES
+═══════════════════════════════════════════ */
+.services-section { background: var(--bg2); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
+
+.services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-top: 3.5rem; }
+
+.svc-card {
+  padding: 2rem 1.5rem;
+  text-align: center; cursor: default;
+  position: relative; overflow: hidden;
+}
+.svc-card::after {
+  content: '';
+  position: absolute; inset: 0; border-radius: inherit;
+  background: radial-gradient(circle at 50% 0%, var(--c-glow), transparent 70%);
+  opacity: 0; transition: opacity 0.3s;
+}
+.svc-card:hover::after { opacity: 1; }
+
+.svc-icon {
+  width: 64px; height: 64px; border-radius: 16px; margin: 0 auto 1.25rem;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+  background: var(--bg3); border: 1px solid var(--glass-border);
+  transition: all 0.3s; position: relative; z-index: 1;
+}
+.svc-card:hover .svc-icon { background: var(--c-glow); border-color: rgba(0,212,255,0.3); transform: scale(1.05); }
+
+.svc-card h3 {
+  font-family: var(--head); font-size: 0.95rem; font-weight: 700;
+  margin-bottom: 0.6rem; position: relative; z-index: 1;
+}
+.svc-card p { font-size: 0.82rem; color: var(--text2); line-height: 1.5; position: relative; z-index: 1; }
+
+/* ═══════════════════════════════════════════
+   RULES & LAWS
+═══════════════════════════════════════════ */
+.rules-timeline {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  margin-top: 4rem;
+}
+
+.rule-card {
+  padding: 2rem; position: relative; overflow: hidden;
+}
+.rule-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, var(--c), var(--c2));
+  border-radius: 0 2px 2px 0;
+  opacity: 0; transition: opacity 0.3s;
+}
+.rule-card:hover::before { opacity: 1; }
+
+.rule-num {
+  font-family: var(--head); font-weight: 800; font-size: 0.7rem;
+  letter-spacing: 0.15em; color: var(--text3);
+  text-transform: uppercase; margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.rule-num::before {
+  content: '';
+  width: 20px; height: 1px; background: var(--text3);
+}
+
+.rule-card h3 {
+  font-family: var(--head); font-weight: 700;
+  font-size: 1rem; margin-bottom: 0.75rem;
+  color: var(--text);
+}
+.rule-card p { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
+
+.rule-icon-bg {
+  position: absolute; right: 1.5rem; top: 1.5rem;
+  font-size: 2.5rem; opacity: 0.06;
+}
+
+/* ═══════════════════════════════════════════
+   BENEFITS
+═══════════════════════════════════════════ */
+.benefits-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+  margin-top: 4rem;
+}
+
+.benefit-card {
+  padding: 2.5rem 1.5rem; text-align: center;
+  position: relative; overflow: hidden;
+  cursor: default;
+}
+
+.benefit-glow {
+  position: absolute; width: 100px; height: 100px; border-radius: 50%;
+  top: -20px; left: 50%; transform: translateX(-50%);
+  pointer-events: none; opacity: 0.15;
+  transition: opacity 0.3s;
+}
+.benefit-card:hover .benefit-glow { opacity: 0.35; }
+
+.counter-num {
+  font-family: var(--head); font-weight: 800;
+  font-size: 2.8rem; line-height: 1;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 30px currentColor;
+}
+.benefit-card h3 {
+  font-family: var(--head); font-weight: 700;
+  font-size: 1rem; margin: 0.5rem 0;
+}
+.benefit-card p { font-size: 0.82rem; color: var(--text2); line-height: 1.5; }
+
+/* ═══════════════════════════════════════════
+   THANK YOU / QA
+═══════════════════════════════════════════ */
+.thankyou-section {
+  background: radial-gradient(ellipse at 50% 50%, rgba(0,212,255,0.05) 0%, transparent 70%);
+  border-top: 1px solid var(--glass-border);
+}
+.thankyou-inner { text-align: center; max-width: 700px; margin: 0 auto; }
+.thankyou-inner h2 {
+  font-family: var(--head); font-weight: 800;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1;
+}
+
+.qa-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 3rem; }
+.qa-card { padding: 1.5rem; text-align: left; }
+.qa-q {
+  font-size: 0.82rem; color: var(--c); font-weight: 600;
+  margin-bottom: 0.5rem; font-family: var(--head);
+}
+.qa-a { font-size: 0.82rem; color: var(--text2); line-height: 1.5; }
+
+/* team */
+.team-section { background: var(--bg2); border-top: 1px solid var(--glass-border); }
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-top: 3rem; }
+.team-card { padding: 2rem 1.5rem; text-align: center; }
+.team-avatar {
+  width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 1rem;
+  background: linear-gradient(135deg, var(--c-glow), rgba(123,97,255,0.15));
+  border: 1.5px solid var(--glass-border-h);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--head); font-weight: 700; font-size: 1.1rem; color: var(--c);
+  letter-spacing: 0.04em;
+}
+.team-card h4 { font-family: var(--head); font-size: 0.9rem; font-weight: 600; }
+.team-card p { font-size: 0.75rem; color: var(--text3); margin-top: 0.2rem; letter-spacing: 0.04em; }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer {
+  background: var(--bg); border-top: 1px solid var(--glass-border);
+  padding: 3rem 0; position: relative; z-index: 1;
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;
+}
+.footer-brand { font-family: var(--head); font-weight: 800; font-size: 1.1rem; color: var(--c); }
+.footer-brand span { color: var(--text2); }
+.footer-tagline { font-size: 0.78rem; color: var(--text3); margin-top: 0.25rem; }
+.footer-links { display: flex; gap: 1.5rem; }
+.footer-links a { font-size: 0.82rem; color: var(--text3); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--c); }
+.footer-copy { font-size: 0.78rem; color: var(--text3); }
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════ */
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+/* ═══════════════════════════════════════════
+   MOBILE NAV
+═══════════════════════════════════════════ */
+.mobile-menu {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 490;
+  background: rgba(3,8,16,0.97); backdrop-filter: blur(20px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1.5rem;
+  opacity: 0; visibility: hidden; transition: all 0.3s;
+}
+.mobile-menu.open { opacity: 1; visibility: visible; }
+.mobile-menu a {
+  font-family: var(--head); font-size: 1.5rem; font-weight: 700;
+  color: var(--text); text-decoration: none; letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+.mobile-menu a:hover { color: var(--c); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links, .nav-cta { display: none; }
+  .hamburger { display: flex; }
+  .pillars-grid { grid-template-columns: 1fr; }
+  .transport-grid { grid-template-columns: 1fr; }
+  .complaint-grid { grid-template-columns: 1fr; }
+  .rules-timeline { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .qa-grid { grid-template-columns: 1fr; }
+  .hero-stats { flex-direction: column; }
+  .hero-stat { border-right: none; border-bottom: 1px solid var(--glass-border); }
+  .hero-stat:last-child { border-bottom: none; }
+  .stats-inner { justify-content: center; }
+  .stat-item { min-width: 120px; }
+  .section-pad { padding: 5rem 0; }
+}
+
+@media (max-width: 600px) {
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  .benefits-grid { grid-template-columns: 1fr 1fr; }
+  .footer-inner { flex-direction: column; text-align: center; }
+  .footer-links { justify-content: center; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Initializing SmartCity</div>
+</div>
+
+<!-- PARTICLES -->
+<canvas id="particles"></canvas>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#transport" onclick="closeMenu()">Transport</a>
+  <a href="#complaints" onclick="closeMenu()">Complaints</a>
+  <a href="#services" onclick="closeMenu()">Services</a>
+  <a href="#rules" onclick="closeMenu()">Rules</a>
+  <a href="#benefits" onclick="closeMenu()">Benefits</a>
+  <a href="#team" onclick="closeMenu()">Team</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">SMART<span>CITY</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#transport">Transport</a></li>
+    <li><a href="#complaints">Complaints</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#rules">Rules</a></li>
+    <li><a href="#benefits">Benefits</a></li>
+    <li><a href="#team">Team</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" title="Toggle theme">☀</button>
+    <button class="nav-cta" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Explore City</button>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════
+     HERO
+═══════════════════════════════════ -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-glow-3"></div>
+
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    Next-Generation Urban Platform
+  </div>
+
+  <h1>
+    <span class="line1">Smart City</span>
+    <span class="accent">Connecting People,<br>Services & Technology</span>
+  </h1>
+
+  <p class="hero-sub">Building Tomorrow's City Today — where intelligence meets infrastructure to create safer, fairer, and faster urban living for every citizen.</p>
+
+  <div class="hero-ctas">
+    <a href="#about" class="btn-glow">Explore Features</a>
+    <a href="#transport" class="btn-outline">Learn More</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">5G</div>
+      <div class="hero-stat-label">Network</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">24/7</div>
+      <div class="hero-stat-label">Monitoring</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">6+</div>
+      <div class="hero-stat-label">Core Services</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">100%</div>
+      <div class="hero-stat-label">Citizen-First</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-mouse"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     STATS BAND
+═══════════════════════════════════ -->
+<div class="stats-band">
+  <div class="stats-inner">
+    <div class="stat-item reveal">
+      <div class="stat-num"><span class="counter" data-target="2.4">0</span><span class="stat-unit">M+</span></div>
+      <div class="stat-label">Citizens Connected</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num"><span class="counter" data-target="247">0</span></div>
+      <div class="stat-label">Smart Signals</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num"><span class="counter" data-target="98">0</span><span class="stat-unit">%</span></div>
+      <div class="stat-label">Service Uptime</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num"><span class="counter" data-target="62">0</span></div>
+      <div class="stat-label">EV Stations</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num"><span class="counter" data-target="3.2">0</span><span class="stat-unit">s</span></div>
+      <div class="stat-label">Avg. Response Time</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     ABOUT
+═══════════════════════════════════ -->
+<section id="about" class="section-pad about-bg">
+  <div class="container">
+    <div class="section-header-center reveal">
+      <div class="section-tag">What is a Smart City</div>
+      <h2 class="section-title">Tech-enabled urban systems <span class="gd">for everyone</span></h2>
+      <p class="section-desc">A smart city leverages ubiquitous sensors, 5G networks, and open data to optimise services, reduce waste, and transform daily life for all citizens.</p>
+    </div>
+    <div class="pillars-grid">
+      <div class="glass-card pillar-card reveal" style="--accent:var(--c)" data-delay="0">
+        <div class="pillar-number">01</div>
+        <div class="pillar-icon-wrap" style="background:rgba(0,212,255,0.1);border-color:var(--c);color:var(--c)">📡</div>
+        <h3 style="color:var(--c)">Connectivity</h3>
+        <ul class="pillar-features">
+          <li style="--fc:var(--c)">Ubiquitous sensors across all districts</li>
+          <li>5G networks for real-time data</li>
+          <li>Open data infrastructure</li>
+          <li>IoT device integration</li>
+        </ul>
+      </div>
+      <div class="glass-card pillar-card reveal" style="--accent:var(--c2)" data-delay="100">
+        <div class="pillar-number">02</div>
+        <div class="pillar-icon-wrap" style="background:rgba(0,255,178,0.1);border-color:var(--c2);color:var(--c2)">⚡</div>
+        <h3 style="color:var(--c2)">Efficiency</h3>
+        <ul class="pillar-features">
+          <li>Optimised transport routing</li>
+          <li>Smart energy management</li>
+          <li>Automated waste systems</li>
+          <li>Resource allocation AI</li>
+        </ul>
+      </div>
+      <div class="glass-card pillar-card reveal" style="--accent:var(--c3)" data-delay="200">
+        <div class="pillar-number">03</div>
+        <div class="pillar-icon-wrap" style="background:rgba(123,97,255,0.1);border-color:var(--c3);color:var(--c3)">🌱</div>
+        <h3 style="color:var(--c3)">Sustainability</h3>
+        <ul class="pillar-features">
+          <li>Reduced carbon emissions</li>
+          <li>Smart grid energy reuse</li>
+          <li>Resource recycling loops</li>
+          <li>Green infrastructure planning</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     TRANSPORT
+═══════════════════════════════════ -->
+<section id="transport" class="section-pad transport-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">Transportation</div>
+      <h2 class="section-title">Move smarter <span class="gd">across the city</span></h2>
+      <p class="section-desc">Real-time intelligence woven into every road, signal, and vehicle — keeping 2.4 million citizens moving efficiently.</p>
+    </div>
+    <div class="transport-grid" style="margin-top:3.5rem">
+      <div class="transport-cards reveal-left">
+        <div class="glass-card t-card active" data-map="maps">
+          <div class="t-card-icon">🗺️</div>
+          <div class="t-card-text">
+            <h4>Real-time Maps</h4>
+            <p>Live routing with congestion alerts across all city roads</p>
+          </div>
+          <div class="t-card-arrow">→</div>
+        </div>
+        <div class="glass-card t-card" data-map="transit">
+          <div class="t-card-icon">🚌</div>
+          <div class="t-card-text">
+            <h4>Public Transport Tracking</h4>
+            <p>Arrival ETAs, crowding data for buses, trains, metro</p>
+          </div>
+          <div class="t-card-arrow">→</div>
+        </div>
+        <div class="glass-card t-card" data-map="signals">
+          <div class="t-card-icon">🚦</div>
+          <div class="t-card-text">
+            <h4>Smart Traffic Signals</h4>
+            <p>Adaptive timing to reduce delays and congestion</p>
+          </div>
+          <div class="t-card-arrow">→</div>
+        </div>
+        <div class="glass-card t-card" data-map="ev">
+          <div class="t-card-icon">⚡</div>
+          <div class="t-card-text">
+            <h4>EV Charging Finder</h4>
+            <p>Real-time availability and reservation citywide</p>
+          </div>
+          <div class="t-card-arrow">→</div>
+        </div>
+      </div>
+      <div class="map-display reveal-right" id="mapDisplay">
+        <div class="map-display-inner"></div>
+        <div class="map-label-bar">
+          <div class="map-label-title" id="mapTitle">CITY ROAD NETWORK</div>
+          <div class="map-live"><div class="map-live-dot"></div>LIVE</div>
+        </div>
+        <!-- SVG roads -->
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.25" viewBox="0 0 400 300">
+          <line x1="0" y1="150" x2="400" y2="150" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="10 5"/>
+          <line x1="200" y1="0" x2="200" y2="300" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="10 5"/>
+          <line x1="0" y1="75" x2="400" y2="75" stroke="#00D4FF" stroke-width="0.8" stroke-dasharray="5 10" opacity="0.5"/>
+          <line x1="0" y1="225" x2="400" y2="225" stroke="#00D4FF" stroke-width="0.8" stroke-dasharray="5 10" opacity="0.5"/>
+          <line x1="100" y1="0" x2="100" y2="300" stroke="#00D4FF" stroke-width="0.8" stroke-dasharray="5 10" opacity="0.5"/>
+          <line x1="300" y1="0" x2="300" y2="300" stroke="#00D4FF" stroke-width="0.8" stroke-dasharray="5 10" opacity="0.5"/>
+          <circle cx="200" cy="150" r="30" stroke="#00D4FF" stroke-width="0.5" fill="none" opacity="0.3"/>
+          <circle cx="100" cy="75" r="5" fill="#00FFB2" opacity="0.7"/>
+          <circle cx="300" cy="225" r="5" fill="#00D4FF" opacity="0.7"/>
+          <circle cx="200" cy="75" r="4" fill="#7B61FF" opacity="0.7"/>
+          <circle cx="100" cy="225" r="4" fill="#00D4FF" opacity="0.7"/>
+          <circle cx="300" cy="75" r="5" fill="#00FFB2" opacity="0.7"/>
+        </svg>
+        <!-- blips -->
+        <div class="map-blip" style="top:25%;left:25%;animation-delay:0s"></div>
+        <div class="map-blip" style="top:55%;left:65%;animation-delay:0.8s;background:var(--c2);box-shadow:0 0 10px var(--c2)"></div>
+        <div class="map-blip" style="top:70%;left:30%;animation-delay:1.6s;background:var(--c3);box-shadow:0 0 10px var(--c3)"></div>
+        <div class="map-blip" style="top:20%;left:70%;animation-delay:0.4s"></div>
+        <div class="map-scan-line"></div>
+        <div class="map-stats-bar">
+          <div class="map-mini-stat"><div class="map-mini-val" style="color:var(--c)">247</div><div class="map-mini-key">Signals</div></div>
+          <div class="map-mini-stat"><div class="map-mini-val" style="color:var(--c2)">98%</div><div class="map-mini-key">On-Time</div></div>
+          <div class="map-mini-stat"><div class="map-mini-val" style="color:var(--c3)">62</div><div class="map-mini-key">EV Pts</div></div>
+          <div class="map-mini-stat"><div class="map-mini-val" style="color:var(--c)">4.2s</div><div class="map-mini-key">Avg Wait</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     COMPLAINTS
+═══════════════════════════════════ -->
+<section id="complaints" class="section-pad">
+  <div class="container">
+    <div class="section-header-center reveal">
+      <div class="section-tag green">Complaint System</div>
+      <h2 class="section-title">Citizen-first <span class="gd">reporting platform</span></h2>
+      <p class="section-desc">Fast, transparent, evidence-based reporting with anonymous options and live status tracking — designed for every citizen.</p>
+    </div>
+    <div class="complaint-grid">
+      <!-- form -->
+      <div class="complaint-form-mock reveal-left">
+        <div class="form-header">
+          <div class="form-title">Submit a Report</div>
+          <div class="anon-badge">🔒 Anonymous</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-input form-select">
+              <option>🚨 Harassment / Crime</option>
+              <option>🔍 Missing Person</option>
+              <option>🧹 Pest / Sanitation</option>
+              <option>🚦 Traffic Violation</option>
+              <option>🌿 Environmental</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Priority</label>
+            <select class="form-input form-select">
+              <option>🔴 Critical</option>
+              <option>🟠 High</option>
+              <option>🟡 Medium</option>
+              <option>🟢 Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Location</label>
+          <input class="form-input" type="text" placeholder="📍 Auto-detect or enter address...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-input form-textarea" placeholder="Describe the incident clearly..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Evidence</label>
+            <input class="form-input" type="text" placeholder="📎 Attach photo/video">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Contact (Optional)</label>
+            <input class="form-input" type="text" placeholder="Phone / Email">
+          </div>
+        </div>
+        <button class="form-submit">Submit Report →</button>
+      </div>
+      <!-- progress -->
+      <div class="reveal-right">
+        <h3 style="font-family:var(--head);font-weight:700;font-size:1rem;margin-bottom:0.5rem;color:var(--text)">Live Status Tracker</h3>
+        <p style="font-size:0.82rem;color:var(--text2);margin-bottom:2rem">Report #SC-2024-08821 — Road Encroachment, Sector 7</p>
+        <div class="progress-tracker">
+          <div class="progress-step">
+            <div class="progress-step-left">
+              <div class="progress-dot done">✓</div>
+              <div class="progress-line done"></div>
+            </div>
+            <div class="progress-content">
+              <h4>Report Submitted</h4>
+              <p>Complaint received and logged in the system</p>
+              <span class="progress-status status-done">Completed • 2 hrs ago</span>
+            </div>
+          </div>
+          <div class="progress-step">
+            <div class="progress-step-left">
+              <div class="progress-dot done">✓</div>
+              <div class="progress-line done"></div>
+            </div>
+            <div class="progress-content">
+              <h4>Verified & Assigned</h4>
+              <p>Geotagged and assigned to District 7 Officer</p>
+              <span class="progress-status status-done">Completed • 1 hr ago</span>
+            </div>
+          </div>
+          <div class="progress-step">
+            <div class="progress-step-left">
+              <div class="progress-dot active">●</div>
+              <div class="progress-line"></div>
+            </div>
+            <div class="progress-content">
+              <h4>Under Investigation</h4>
+              <p>Field team deployed to the reported location</p>
+              <span class="progress-status status-active">In Progress</span>
+            </div>
+          </div>
+          <div class="progress-step">
+            <div class="progress-step-left">
+              <div class="progress-dot pending">4</div>
+              <div class="progress-line"></div>
+            </div>
+            <div class="progress-content">
+              <h4>Action Taken</h4>
+              <p>Enforcement action and resolution implemented</p>
+              <span class="progress-status status-pending">Pending</span>
+            </div>
+          </div>
+          <div class="progress-step">
+            <div class="progress-step-left">
+              <div class="progress-dot pending">5</div>
+            </div>
+            <div class="progress-content">
+              <h4>Resolved & Closed</h4>
+              <p>Citizen notified, feedback requested</p>
+              <span class="progress-status status-pending">Pending</span>
+            </div>
+          </div>
+        </div>
+        <div class="glass-card" style="margin-top:2rem;padding:1.25rem;border-radius:var(--r);margin-top:2rem">
+          <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+            <div style="text-align:center">
+              <div style="font-family:var(--head);font-size:1.4rem;font-weight:700;color:var(--c2)">4,821</div>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px">Resolved This Month</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-family:var(--head);font-size:1.4rem;font-weight:700;color:var(--c)">2.4h</div>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px">Avg Response Time</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-family:var(--head);font-size:1.4rem;font-weight:700;color:var(--c3)">96%</div>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px">Satisfaction Rate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     CITY SERVICES
+═══════════════════════════════════ -->
+<section id="services" class="section-pad services-section">
+  <div class="container">
+    <div class="section-header-center reveal">
+      <div class="section-tag">City Services</div>
+      <h2 class="section-title">Everything citizens need, <span class="gd">digitally integrated</span></h2>
+      <p class="section-desc">From emergency response to animal welfare, every city service is accessible, transparent, and fast.</p>
+    </div>
+    <div class="services-grid">
+      <div class="glass-card svc-card reveal" data-delay="0">
+        <div class="svc-icon">🏥</div>
+        <h3>Health & Emergency</h3>
+        <p>Instant routing to nearest hospital with live availability and ambulance dispatch</p>
+      </div>
+      <div class="glass-card svc-card reveal" data-delay="80">
+        <div class="svc-icon">🍱</div>
+        <h3>Food Welfare</h3>
+        <p>Targeted delivery support for underprivileged citizens coordinated with NGOs</p>
+      </div>
+      <div class="glass-card svc-card reveal" data-delay="160">
+        <div class="svc-icon">📄</div>
+        <h3>Licence Services</h3>
+        <p>Apply, renew, or track licences entirely online with real-time status updates</p>
+      </div>
+      <div class="glass-card svc-card reveal" data-delay="240">
+        <div class="svc-icon">🐾</div>
+        <h3>Animal Rescue</h3>
+        <p>Stray management and adoption workflows with volunteer coordination tools</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     RULES & LAWS
+═══════════════════════════════════ -->
+<section id="rules" class="section-pad">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">Rules & Laws</div>
+      <h2 class="section-title">Standards for a fair, <span class="gd">orderly city</span></h2>
+      <p class="section-desc">Clear enforcement frameworks and digital infrastructure standards that keep the city accountable and transparent.</p>
+    </div>
+    <div class="rules-timeline">
+      <div class="glass-card rule-card reveal" data-delay="0">
+        <div class="rule-num">01</div>
+        <div class="rule-icon-bg">🏗️</div>
+        <h3>Infrastructure Standards</h3>
+        <p>Interoperability and safety benchmarks for all city technology deployments. Every system must meet open-standard protocols for seamless integration.</p>
+      </div>
+      <div class="glass-card rule-card reveal" data-delay="100">
+        <div class="rule-num">02</div>
+        <div class="rule-icon-bg">🏪</div>
+        <h3>Encroachment Rules</h3>
+        <p>Stall permits and fair-use policies to keep public spaces accessible to all citizens. Digital permit tracking eliminates corruption from the process.</p>
+      </div>
+      <div class="glass-card rule-card reveal" data-delay="0">
+        <div class="rule-num">03</div>
+        <div class="rule-icon-bg">🚗</div>
+        <h3>Digital Traffic Enforcement</h3>
+        <p>Automated fines with photographic evidence logs. No human discretion in issuing penalties — the system is transparent and tamper-proof.</p>
+      </div>
+      <div class="glass-card rule-card reveal" data-delay="100">
+        <div class="rule-num">04</div>
+        <div class="rule-icon-bg">🗺️</div>
+        <h3>Zoning Regulations</h3>
+        <p>Clear commercial and residential boundary definitions with transparent planning records. All zoning decisions are publicly accessible on the city portal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     BENEFITS
+═══════════════════════════════════ -->
+<section id="benefits" class="section-pad" style="background:var(--bg2);border-top:1px solid var(--glass-border);border-bottom:1px solid var(--glass-border)">
+  <div class="container">
+    <div class="section-header-center reveal">
+      <div class="section-tag green">Impact</div>
+      <h2 class="section-title">The Smart City <span class="gd">difference</span></h2>
+      <p class="section-desc">Four pillars that define what life looks like in a city built for its citizens — measurably better in every dimension.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="glass-card benefit-card reveal" data-delay="0">
+        <div class="benefit-glow" style="background:var(--c)"></div>
+        <div class="counter-num" style="color:var(--c)"><span class="counter" data-target="40">0</span>%</div>
+        <h3>Fairer Systems</h3>
+        <p>Reduction in citizen complaints about unequal service access through transparent, automated allocation</p>
+      </div>
+      <div class="glass-card benefit-card reveal" data-delay="100">
+        <div class="benefit-glow" style="background:var(--c2)"></div>
+        <div class="counter-num" style="color:var(--c2)"><span class="counter" data-target="60">0</span>%</div>
+        <h3>Better Quality</h3>
+        <p>Improvement in infrastructure quality ratings after smart city deployment across all districts</p>
+      </div>
+      <div class="glass-card benefit-card reveal" data-delay="200">
+        <div class="benefit-glow" style="background:var(--c3)"></div>
+        <div class="counter-num" style="color:var(--c3)"><span class="counter" data-target="75">0</span>%</div>
+        <h3>Faster Services</h3>
+        <p>Reduction in average service response times through AI routing, automation, and digital-first delivery</p>
+      </div>
+      <div class="glass-card benefit-card reveal" data-delay="300">
+        <div class="benefit-glow" style="background:#FF6B6B"></div>
+        <div class="counter-num" style="color:#FF6B6B"><span class="counter" data-target="35">0</span>%</div>
+        <h3>Safer City</h3>
+        <p>Decrease in reported incidents through smart surveillance, rapid emergency response, and community reporting</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     TEAM
+═══════════════════════════════════ -->
+<section id="team" class="section-pad team-section">
+  <div class="container">
+    <div class="section-header-center reveal">
+      <div class="section-tag">The Team</div>
+      <h2 class="section-title">Built by students, <span class="gd">designed for the future</span></h2>
+    </div>
+    <div class="team-grid">
+      <div class="glass-card team-card reveal" data-delay="0">
+        <div class="team-avatar">MM</div>
+        <h4>Muhammad Muaaz</h4>
+        <p>Team Lead</p>
+      </div>
+      <div class="glass-card team-card reveal" data-delay="80">
+        <div class="team-avatar" style="background:linear-gradient(135deg,rgba(0,255,178,0.1),rgba(0,212,255,0.1));color:var(--c2);border-color:rgba(0,255,178,0.3)">MBF</div>
+        <h4>Muhammad Bin Fazal</h4>
+        <p>Developer</p>
+      </div>
+      <div class="glass-card team-card reveal" data-delay="160">
+        <div class="team-avatar" style="background:linear-gradient(135deg,rgba(123,97,255,0.1),rgba(0,212,255,0.1));color:var(--c3);border-color:rgba(123,97,255,0.3)">MS</div>
+        <h4>Mahad Saeed</h4>
+        <p>Designer</p>
+      </div>
+      <div class="glass-card team-card reveal" data-delay="240">
+        <div class="team-avatar" style="background:linear-gradient(135deg,rgba(255,107,107,0.1),rgba(0,212,255,0.1));color:#FF6B6B;border-color:rgba(255,107,107,0.3)">SY</div>
+        <h4>Salman Yaqoob</h4>
+        <p>Researcher</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     THANK YOU
+═══════════════════════════════════ -->
+<section id="thankyou" class="section-pad thankyou-section">
+  <div class="container">
+    <div class="thankyou-inner reveal">
+      <div class="section-tag" style="margin:0 auto 1.5rem">Smart City Project</div>
+      <h2 class="section-title" style="font-size:clamp(2.2rem,5vw,4rem);margin-bottom:1.5rem">
+        <span class="gd">Thank You</span> 🙏
+      </h2>
+      <p style="font-size:1.1rem;color:var(--text2);margin-bottom:3rem;line-height:1.7">
+        Smart City — Building Tomorrow's City Today.<br>
+        A vision for fairer, faster, safer urban living for every citizen.
+      </p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:4rem">
+        <a href="#home" class="btn-glow">Back to Top</a>
+        <a href="#complaints" class="btn-outline">File a Report</a>
+      </div>
+    </div>
+    <div class="qa-grid">
+      <div class="glass-card qa-card reveal" data-delay="0">
+        <div class="qa-q">Q: How does anonymous reporting work?</div>
+        <div class="qa-a">All reports can be submitted without personal details. The system uses one-way encryption so even administrators cannot identify reporters.</div>
+      </div>
+      <div class="glass-card qa-card reveal" data-delay="100">
+        <div class="qa-q">Q: Who has access to city data?</div>
+        <div class="qa-a">Aggregated data is open to citizens via the public portal. Personal data is strictly governed by the city's Digital Privacy Charter.</div>
+      </div>
+      <div class="glass-card qa-card reveal" data-delay="200">
+        <div class="qa-q">Q: How are smart signals programmed?</div>
+        <div class="qa-a">AI models analyse real-time vehicle density from sensors and cameras, adjusting signal timing every 30 seconds to minimise average wait times.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">SMART<span>CITY</span></div>
+      <div class="footer-tagline">Building Tomorrow's City Today</div>
+    </div>
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="#transport">Transport</a>
+      <a href="#complaints">Complaints</a>
+      <a href="#services">Services</a>
+      <a href="#team">Team</a>
+    </div>
+    <div class="footer-copy">© 2025 SmartCity Project</div>
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════
+   LOADER
+══════════════════════════════════ */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 1200);
+});
+
+/* ══════════════════════════════════
+   PARTICLES
+══════════════════════════════════ */
+(function() {
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], lines = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const isDark = () => document.documentElement.getAttribute('data-theme') !== 'light';
+
+  for (let i = 0; i < 60; i++) {
+    particles.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 1.5 + 0.5,
+      a: Math.random()
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const color = isDark() ? '0,212,255' : '0,80,180';
+
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${color},${p.a * 0.6})`;
+      ctx.fill();
+    });
+
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 100) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(${color},${(1 - dist/100) * 0.15})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══════════════════════════════════
+   NAV SCROLL
+══════════════════════════════════ */
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+/* ══════════════════════════════════
+   THEME TOGGLE
+══════════════════════════════════ */
+const themeBtn = document.getElementById('themeBtn');
+themeBtn.addEventListener('click', () => {
+  const html = document.documentElement;
+  const isLight = html.getAttribute('data-theme') === 'light';
+  html.setAttribute('data-theme', isLight ? 'dark' : 'light');
+  themeBtn.textContent = isLight ? '☀' : '🌙';
+});
+
+/* ══════════════════════════════════
+   MOBILE MENU
+══════════════════════════════════ */
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+/* ══════════════════════════════════
+   INTERSECTION OBSERVER
+══════════════════════════════════ */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const delay = e.target.getAttribute('data-delay') || 0;
+      setTimeout(() => {
+        e.target.classList.add('visible');
+        // trigger counter
+        e.target.querySelectorAll('.counter').forEach(c => animateCounter(c));
+        if (e.target.classList.contains('stat-item')) {
+          e.target.querySelectorAll('.counter').forEach(c => animateCounter(c));
+        }
+      }, parseInt(delay));
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => io.observe(el));
+
+// also observe stat items for counters
+document.querySelectorAll('.stat-item').forEach(el => io.observe(el));
+
+/* ══════════════════════════════════
+   COUNTER ANIMATION
+══════════════════════════════════ */
+function animateCounter(el) {
+  if (el.dataset.animated) return;
+  el.dataset.animated = true;
+  const target = parseFloat(el.dataset.target);
+  const isDecimal = target % 1 !== 0;
+  const duration = 1800;
+  const start = performance.now();
+  function step(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const val = target * eased;
+    el.textContent = isDecimal ? val.toFixed(1) : Math.round(val);
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = isDecimal ? target.toFixed(1) : target;
+  }
+  requestAnimationFrame(step);
+}
+
+// trigger counters in benefits/stats on scroll
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.counter').forEach(c => animateCounter(c));
+      counterObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.benefit-card, .stat-item').forEach(el => counterObserver.observe(el));
+
+/* ══════════════════════════════════
+   TRANSPORT MAP INTERACTION
+══════════════════════════════════ */
+const mapTitles = {
+  maps: 'CITY ROAD NETWORK — LIVE',
+  transit: 'PUBLIC TRANSPORT GRID',
+  signals: 'TRAFFIC SIGNAL NETWORK',
+  ev: 'EV CHARGING LOCATIONS'
+};
+
+document.querySelectorAll('.t-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.t-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    const key = card.dataset.map;
+    document.getElementById('mapTitle').textContent = mapTitles[key] || 'CITY NETWORK';
+  });
+});
+
+/* ══════════════════════════════════
+   STAGGER GRID CHILDREN
+══════════════════════════════════ */
+document.querySelectorAll('.pillars-grid, .services-grid, .benefits-grid, .team-grid, .qa-grid, .rules-timeline').forEach(grid => {
+  grid.querySelectorAll('.reveal, .glass-card').forEach((card, i) => {
+    if (!card.getAttribute('data-delay')) card.setAttribute('data-delay', i * 80);
+  });
+});
+</script>
+</body>
+</html>
